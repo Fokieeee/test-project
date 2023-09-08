@@ -1,6 +1,6 @@
 <template>
   <div class="input-container">
-    <input class="filter-input" type="text" v-model="authorName" placeholder="Enter author" />
+    <input class="filter-input" type="text" v-model="inputValue" placeholder="Enter author" />
   </div>
 </template>
 
@@ -11,13 +11,18 @@ import { storeToRefs } from 'pinia'
 import { ref, watchEffect } from 'vue'
 const { filteredPosts, posts, users } = storeToRefs(usePostsStore())
 
-const authorName = ref('')
+const inputValue = ref('')
 
 const filterPostsByAuthor = (inputValue: string): Post[] => {
   const filteredArray: Post[] = []
   for (const post of posts.value) {
     const userName = users.value.find((user: User) => user.id === post.userId)?.name || ''
-    if (userName.toLowerCase().replace(' ', '').includes(inputValue.toLowerCase())) {
+    if (
+      userName
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .includes(inputValue.replace(/\s+/g, '').toLowerCase())
+    ) {
       filteredArray.push(post)
     }
   }
@@ -25,19 +30,20 @@ const filterPostsByAuthor = (inputValue: string): Post[] => {
 }
 
 watchEffect(() => {
-  filteredPosts.value = filterPostsByAuthor(authorName.value)
+  filteredPosts.value = filterPostsByAuthor(inputValue.value)
 })
 </script>
 
 <style lang="scss" scoped>
 .input-container {
+  margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .filter-input {
     all: unset;
-    font: var(--font-xl);
+    font: var(--font-l);
     border-bottom: 1px solid #ccc;
   }
 }

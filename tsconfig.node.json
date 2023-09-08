@@ -6,7 +6,6 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "src/models/models.ts"
   ],
   "compilerOptions": {
     "composite": true,
