@@ -1,0 +1,9 @@
+@import 'base';
+@import 'variables/global.scss';
+
+body {
+  background: var(--bg-color);
+  font: var(--font-m);
+  color: var(--primary-color);
+  min-height: 100vh;
+}
