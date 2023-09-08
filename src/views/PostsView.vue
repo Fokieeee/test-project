@@ -4,8 +4,9 @@ import { usePostsStore } from '@/stores/postsStore'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import type { User } from '@/models/models'
+import FilterInput from '@/components/FilterInput.vue'
 
-const { posts, isLoading, isError, users } = storeToRefs(usePostsStore())
+const { isLoading, isError, users, filteredPosts } = storeToRefs(usePostsStore())
 const { fetchPosts, fetchUsers } = usePostsStore()
 
 onMounted(async () => {
@@ -14,24 +15,31 @@ onMounted(async () => {
 })
 
 const currentUser = (postId: number): User | undefined => {
-  return users.value.find((user) => user.id === postId)
+  return users.value.find((user: User) => user.id === postId)
 }
 </script>
 
 <template>
   <main>
+    <FilterInput />
+    <ul>
+      <li class="posts-container" v-for="post in filteredPosts" :key="post.id">
+        <PostItem :post="post" :user="currentUser(post.userId)" />
+      </li>
+    </ul>
     <p v-if="isLoading">Loading posts...</p>
     <p v-if="isError">Error</p>
-    <div class="posts-container" v-for="post in posts" :key="post.id">
-      <PostItem :post="post" :user="currentUser(post.id)" />
-    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
-.posts-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+main {
+  margin: 1rem;
+  .posts-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

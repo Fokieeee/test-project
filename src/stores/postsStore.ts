@@ -5,30 +5,28 @@ import type { Post, User } from '@/models/models'
 interface State {
   posts: Post[]
   users: User[]
-  isLoading: Boolean
-  isError: Boolean
+  filteredPosts: Post[],
+  isLoading: boolean
+  isError: boolean
 }
 
 export const usePostsStore = defineStore('posts', {
   state: (): State => ({
     posts: [],
-    users:[],
+    users: [],
+    filteredPosts: [],
     isLoading: false,
     isError: false
   }),
 
-  getters: {
-    getPosts(): Post[] {
-      return this.posts
-    }
-  },
+  getters: {},
 
   actions: {
     async fetchPosts() {
       try {
         this.isLoading = true
-        const {data}= await axios.get<Post[]>(
-          'https://jsonplaceholder.typicode.com/posts?_limit=10'
+        const { data } = await axios.get<Post[]>(
+          'https://jsonplaceholder.typicode.com/posts?_limit=100'
         )
         this.posts = data
       } catch (error) {
@@ -40,7 +38,7 @@ export const usePostsStore = defineStore('posts', {
     async fetchUsers() {
       try {
         this.isLoading = true
-        const {data} = await axios.get<User[]>(
+        const { data } = await axios.get<User[]>(
           'http://jsonplaceholder.typicode.com/users?_limit=10'
         )
         this.users = data
