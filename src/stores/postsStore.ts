@@ -5,7 +5,7 @@ import type { Post, User } from '@/models/models'
 interface State {
   posts: Post[]
   users: User[]
-  filteredPosts: Post[],
+  filteredPosts: Post[]
   isLoading: boolean
   isError: boolean
 }
@@ -31,6 +31,7 @@ export const usePostsStore = defineStore('posts', {
         this.posts = data
       } catch (error) {
         console.error('Error fetching data:', error)
+        this.isError = true
       } finally {
         this.isLoading = false
       }

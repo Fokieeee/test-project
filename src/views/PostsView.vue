@@ -30,7 +30,7 @@ const currentUser = (postId: number): User | undefined => {
       </li>
     </ul>
 
-    <p v-else class="notification">No matches</p>
+    <p v-else-if="!isError" class="notification">No matches</p>
 
     <p v-if="isError" class="notification">Error</p>
   </main>
